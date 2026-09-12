@@ -1,6 +1,20 @@
 title: "The Engineering Lead, a Dad, a Husband and Myself."
 author: "James Ockenden"
 description: "Reflections, interactions, and practical lessons from my role in software leadership, family life, and navigating everything in between."
-theme: minima
+
+# Use Beautiful Jekyll styling via GitHub Pages remote theme engine
+remote_theme: daattali/beautiful-jekyll
+plugins:
+  - jekyll-remote-theme
+  - jekyll-feed
+
+# Navigation Menu
+navbar-links:
+  Home: "index"
+
+# Social Links (Optional)
+github-username: "jamesockenden"
+
+# Markdown & Syntax Highlighting
 markdown: kramdown
 highlighter: rouge
