@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Articles.
+title: The Engineering Lead, a Dad, a Husband and Myself.
 ---
 
 Hi!   
