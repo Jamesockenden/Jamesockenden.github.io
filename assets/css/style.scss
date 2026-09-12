@@ -1,0 +1,16 @@
+---
+---
+@import "{{ site.theme }}";
+
+/* Prevent code snippets from breaking mobile responsive layouts */
+pre, code {
+  white-space: pre-wrap;       /* CSS3 directive for wrapping */
+  word-break: break-word;     /* Break long commands */
+  overflow-x: auto;          /* Scroll horizontally inside block */
+}
+
+/* Ensure images and tables don't overflow mobile viewports */
+img, table {
+  max-width: 100%;
+  height: auto;
+}
