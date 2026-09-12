@@ -1,6 +1,7 @@
 ---
 layout: home
-title: Articles
+title: The Engineering Lead, a Dad, a Husband and Myself.
 ---
 
-Welcome! Here I share experiences, ideass, and lessons learned.
+Hi!   
+Here I share some of my experiences, ideass, and lessons learned.
