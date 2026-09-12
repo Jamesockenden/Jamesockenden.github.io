@@ -18,3 +18,6 @@ github-username: "jamesockenden"
 # Markdown & Syntax Highlighting
 markdown: kramdown
 highlighter: rouge
+
+# Prevents Jekyll's default permalink structure appends another folder layer
+permalink: /:categories/:title/
