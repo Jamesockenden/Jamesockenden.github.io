@@ -21,3 +21,11 @@ highlighter: rouge
 
 # Prevents Jekyll's default permalink structure appends another folder layer
 permalink: /:categories/:title/
+
+sass:
+  style: compressed
+
+url: "https://jamesockenden.github.io"
+baseurl: ""
+
+timezone: Europe/London
