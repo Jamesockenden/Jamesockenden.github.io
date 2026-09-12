@@ -5,11 +5,10 @@ author: "James Ockenden - Engineering Lead"
 date: 2026-09-05 07:00:00 +0000
 categories: [AI, Development, Copilot]
 tags: [mcp, copilot-cli, sqlite, vector-search, rrf, agentic-memory]
+---
 
 Whenever you open a fresh terminal session, your AI coding CLI starts from square one. It has zero memory of your past projects, no awareness of previous mistakes, and no easy way to recall specific workflows without you pasting the same context over and over.
 To fix this, I built a custom Agentic Memory MCP Server for Copilot CLI. The goal was simple: create an agentic memory engine that enables Copilot to Recall, Reason, Act, Learn, and Store all while keeping token consumption and API credit usage as low as possible.
-
----
 
 ### The Core Architecture: Memory Without Token Bloat
 To prevent dumping massive files into every prompt, I split the memory layer into three distinct document types:
