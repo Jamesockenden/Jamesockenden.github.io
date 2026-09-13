@@ -1,0 +1,26 @@
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" 
+        data-cf-beacon='{"token": "fa17034dc93c46b5aa3b1b3f42793772"}'>
+</script>
+
+<!-- Mermaid.js Diagram Engine -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+  // Convert both <div class="mermaid"> and <pre><code class="language-mermaid"> elements
+  const targets = document.querySelectorAll('.mermaid, pre code.language-mermaid, div.language-mermaid');
+
+  targets.forEach((node) => {
+    if (node.tagName.toLowerCase() === 'code' || node.classList.contains('language-mermaid')) {
+      const container = node.closest('pre') || node.closest('div');
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = node.textContent.trim();
+      container.replaceWith(div);
+    }
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>

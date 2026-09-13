@@ -1,0 +1,18 @@
+<nav class="site-nav navbar-custom">
+  <a class="navbar-brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+  <button class="nav-toggle" type="button" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
+  <div class="nav-menu" id="main-navbar">
+    <ul>
+      {% for link in site.navbar-links %}
+        <li><a href="{{ link[1] | relative_url }}">{{ link[0] }}</a></li>
+      {% endfor %}
+      {% for section in site.sections %}
+        <li><a href="{{ section.url | relative_url }}">{{ section.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</nav>

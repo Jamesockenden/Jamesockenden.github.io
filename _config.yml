@@ -2,15 +2,27 @@ title: "Articles."
 author: "James Ockenden"
 description: "Reflections, interactions, and practical lessons from my role in software leadership, family life, and navigating everything in between."
 
-# Use Beautiful Jekyll styling via GitHub Pages remote theme engine
-remote_theme: daattali/beautiful-jekyll
 plugins:
-  - jekyll-remote-theme
   - jekyll-feed
 
 # Navigation Menu
 navbar-links:
   Home: "index"
+
+# Editorial sections. Posts use one matching `section` value in front matter.
+sections:
+  - slug: engineering-lead
+    title: The Engineering Lead
+    url: engineering-lead/
+    description: Leadership, engineering practice, and building better teams.
+  - slug: dad-and-husband
+    title: The Dad and Husband
+    url: dad-and-husband/
+    description: Family life and the home.
+  - slug: myself
+    title: Myself
+    url: myself/
+    description: Personal reflections, ideas, and everything in between.
 
 # Social Links (Optional)
 github-username: "jamesockenden"
@@ -18,9 +30,16 @@ github-username: "jamesockenden"
 # Markdown & Syntax Highlighting
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    disable: false
 
 # Prevents Jekyll's default permalink structure appends another folder layer
 permalink: /:categories/:title/
+
+head-extra:
+  - "head-extra.html"
 
 sass:
   style: compressed

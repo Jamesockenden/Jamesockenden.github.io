@@ -3,6 +3,8 @@ layout: post
 title: "Building an Agentic Memory MCP Server for Copilot CLI"
 author: "James Ockenden - Engineering Lead"
 date: 2026-09-05 07:00:00 +0000
+section: engineering-lead
+permalink: /engineering-lead/:title/
 categories: [AI, Development, Copilot]
 tags: [mcp, copilot-cli, sqlite, vector-search, rrf, agentic-memory]
 ---
@@ -11,40 +13,26 @@ Whenever you open a fresh terminal session, your AI coding CLI starts from squar
 To fix this, I built a custom Agentic Memory MCP Server for Copilot CLI. The goal was simple: create an agentic memory engine that enables Copilot to Recall, Reason, Act, Learn, and Store all while keeping token consumption and API credit usage as low as possible.
 
 ### The Core Architecture: Memory Without Token Bloat
-To prevent dumping massive files into every prompt, I split the memory layer into three distinct document types:
-```text
-                         ┌─────────────────────────┐
-                         │       Copilot CLI       │
-                         └────────────┬────────────┘
-                                      │
-                         ┌─────────────────────────┐
-                         │    Agentic Memory MCP   │
-                         └────────────┬────────────┘
-                                      │
-           ┌──────────────────────────┴──────────────────────────┐
-┌─────────────────────────┐                           ┌─────────────────────────┐
-│ Vector Search           │                           │ Full-Text Search (FTS5) │
-│ (sqlite-vec)            │                           │ Exact Keywords & Symbols│
-└──────────┬──────────────┘                           └──────────┬──────────────┘
-           │                                                     │
-           └──────────────────────────┬──────────────────────────┘
-                                      │
-                         ┌─────────────────────────┐
-                         │  Reciprocal Rank Fusion │
-                         │      (RRF Cross-Ref)    │
-                         └────────────┬────────────┘
-                                      │
-        ┌─────────────────────────────┼─────────────────────────────┐
-┌─────────────────────────┐ ┌─────────────────────────┐ ┌─────────────────────────┐
-│ Durable Knowledge       │ │ Short-Lived Context     │ │ Task Skills             │
-│ (Markdown OKF Format)   │ │ (Notes, Fixes, Lessons) │ │ (Workflows & Procedures)│
-└─────────────────────────┘ └─────────────────────────┘ └─────────────────────────┘
+To prevent dumping massive files into every prompt, I split the memory layer into three distinct document types:  
+
+```mermaid
+flowchart TD
+    CLI["Copilot CLI"] --> MCP["Agentic Memory MCP"]
+
+    MCP --> VEC["Vector Search<br/>(sqlite-vec)"]
+    MCP --> FTS["Full-Text Search (FTS5)<br/>Exact Keywords & Symbols"]
+
+    VEC --> RRF["Reciprocal Rank Fusion<br/>(RRF Cross-Ref)"]
+    FTS --> RRF
+
+    RRF --> DK["Durable Knowledge<br/>(Markdown OKF Format)"]
+    RRF --> SLC["Short-Lived Context<br/>(Notes, Fixes, Lessons)"]
+    RRF --> TS["Task Skills<br/>(Workflows & Procedures)"]
 ```
-Hybrid Retrieval Pipeline (SQLite Vector + FTS5 + RRF)
-Instead of scanning every document on every query, retrieval happens through a hybrid engine:
-Dual Search Channels: Incoming prompts trigger a vector search (`sqlite-vec`) for conceptual intent and a full-text search (`FTS5`) for exact syntax, variables, and error codes.
-Cross-Referencing via RRF: Results are merged using Reciprocal Rank Fusion (RRF) directly in SQL, surfacing only high-confidence entries.
-Precision Injection: Copilot receives only the top ranked snippets, keeping prompt tokens strict.
+
+Hybrid Retrieval Pipeline (SQLite Vector + FTS5 + RRF)   
+Instead of scanning every document on every query, retrieval happens through dual search channels. Incoming prompts trigger a vector search (`sqlite-vec`) for conceptual intent and a full text search (`FTS5`) for exact syntax, variables, and error codes.  
+Results are merged using Reciprocal Rank Fusion (RRF) directly in SQL, surfacing only high-confidence entries. Copilot receives only the top ranked snippets, keeping prompt tokens strict.
 
 ---
 
@@ -59,7 +47,7 @@ The MCP server organises memory into three functional tiers:
 
 #### **2. Short Lived Context**
 - **Format:** Episodic notes, decisions, runtime fixes, lessons learned  
-- **Content:** Temporary insights from recent sessions  
+- **Content:** Insights from recent sessions  
 - **Purpose:** Prevents repeated mistakes and preserves continuity across terminal sessions
 
 #### **3. Task Skills**
@@ -73,12 +61,10 @@ The MCP server organises memory into three functional tiers:
 ### The Execution Cycle: Recall > Reason & Act > Learn & Store
 This 3 tier setup powers an autonomous learning loop during every CLI interaction:
 
-```text
-┌──────────┐     ┌────────────────┐     ┌───────────────┐
-│  RECALL  │ ──► │  REASON & ACT  │ ──► │ LEARN & STORE │
-└──────────┘     └────────────────┘     └───────────────┘
-  Fetch OKF        Execute skill,        Log new fixes,
-  & lessons        apply workflow        update OKF/skills
+```mermaid
+flowchart LR
+    A["<b>RECALL</b><br/><small>Fetch OKF & lessons</small>"] --> B["<b>REASON & ACT</b><br/><small>Execute skill, apply workflow</small>"]
+    B --> C["<b>LEARN & STORE</b><br/><small>Log new fixes, update OKF/skills</small>"]
 ```
 
 **Recall**: Upon receiving a command, the MCP server runs hybrid search over the SQLite index to pull relevant OKF knowledge files, previous fixes, and active lessons learned.  
