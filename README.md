@@ -11,7 +11,7 @@ Posts belongs to one of the following sections:
 - `engineering-lead`
 - `dad-and-husband`
 - `myself`
- 
+
 `Note to self` section and section permalinks should be added to new posts:
 
 ```yaml
