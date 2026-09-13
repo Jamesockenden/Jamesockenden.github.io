@@ -7,7 +7,7 @@ plugins:
 
 # Navigation Menu
 navbar-links:
-  Home: "index"
+  Home: "/"
 
 # Editorial sections. Posts use one matching `section` value in front matter.
 sections:

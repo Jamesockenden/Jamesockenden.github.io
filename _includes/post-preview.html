@@ -16,7 +16,7 @@
         <span>Tags:</span>
         <ul class="tag-list" role="list">
           {% for tag in post.tags %}
-            <li><a href="{{ '/tags#' | append: tag | relative_url }}">{{ tag }}</a></li>
+            <li><a href="{{ tag | slugify | prepend: '/tags/#' | relative_url }}">{{ tag }}</a></li>
           {% endfor %}
         </ul>
       </div>

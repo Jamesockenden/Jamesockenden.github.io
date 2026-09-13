@@ -27,3 +27,20 @@ tags: [optional, discovery, tags]
 ```
 
 The `section` value controls the section landing page and homepage grouping. Technical `categories` and `tags` remain separate metadata for article classification and discovery.
+
+## Pre-publish checks
+
+Install the Linux Ruby toolchain in WSL once:
+
+```powershell
+wsl -d Debian -- sudo apt update
+wsl -d Debian -- sudo apt install -y ruby-full ruby-bundler build-essential
+```
+
+Run the checks from PowerShell before publishing:
+
+```powershell
+.\run-checks-wsl.ps1
+```
+
+The script runs markdownlint, a strict Jekyll build, and HTMLProofer against the generated `_site` directory. Use `-Distro` if your WSL distribution has a different name.
