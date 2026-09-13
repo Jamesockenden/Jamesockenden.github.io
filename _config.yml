@@ -43,6 +43,7 @@ head-extra:
 
 sass:
   style: compressed
+  sass_dir: assets/css
 
 url: "https://jamesockenden.github.io"
 baseurl: ""
