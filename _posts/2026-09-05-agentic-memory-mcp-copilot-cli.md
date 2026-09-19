@@ -5,8 +5,8 @@ author: "James Ockenden - Engineering Lead"
 date: 2026-09-05 07:00:00 +0000
 section: engineering-lead
 permalink: /engineering-lead/:title/
-categories: [AI, Development, Copilot]
-tags: [mcp, copilot-cli, sqlite, vector-search, rrf, agentic-memory]
+categories: [Engineering Leadership]
+tags: [mcp, copilot, sqlite, vector-search, rrf, agentic, memory, ai]
 ---
 
 Whenever you open a fresh terminal session, your AI coding CLI starts from square one. It has zero memory of your past projects, no awareness of previous mistakes, and no easy way to recall specific workflows without you pasting the same context over and over.

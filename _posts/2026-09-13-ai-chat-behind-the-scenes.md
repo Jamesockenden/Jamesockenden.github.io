@@ -5,8 +5,8 @@ author: "James Ockenden - Engineering Lead"
 date: 2026-09-13 10:00:00 +0000
 section: engineering-lead
 permalink: /engineering-lead/:title/
-categories: [AI, Gemini, Chatgpt, Chat, Prompt]
-tags: [chatgpt, gemini, ai chat, ai]
+categories: [Engineering Leadership]
+tags: [chatgpt, gemini, ai chat, prompt]
 ---
 
 A lot of people I talk to describe AI like it’s one massive mind sitting behind every chat window, learning from every conversation and growing into something bigger each day. I get why it feels that way. The replies come back almost human, it refers to what you said a moment ago, it can explain complex topics, shift tone instantly, and answer nearly any question you throw at it. When something behaves that smoothly, people naturally assume there’s a single, central intelligence behind it, one big brain absorbing everything and getting smarter with every chat.
