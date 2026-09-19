@@ -5,18 +5,31 @@ Write-Host "Building site with strict rules..." -ForegroundColor Green
 bundle exec jekyll build --strict
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-if (Get-Command docker -ErrorAction SilentlyContinue) {
-	docker info *> $null
+if (Get-Command wsl -ErrorAction SilentlyContinue) {
+	wsl -e true 2>$null
 	if ($LASTEXITCODE -eq 0) {
-		Write-Host "Running HTMLProofer in the CI-compatible Ruby container..." -ForegroundColor Green
-		docker run --rm -v "${PWD}:/site" -w /site ruby:3.3 bash -lc "bundle install --jobs 4 && bundle exec htmlproofer ./_site --disable-external"
+		Write-Host "Syncing site and Gemfile into WSL for HTMLProofer..." -ForegroundColor Green
+
+		$winPath = $PWD.Path
+		$driveLetter = $winPath.Substring(0,1).ToLower()
+		$restOfPath = $winPath.Substring(2) -replace '\\', '/'
+		$wslPath = "/mnt/$driveLetter$restOfPath"
+
+		wsl mkdir -p ~/htmlproofer-check
+		wsl rm -rf ~/htmlproofer-check/_site
+		wsl cp -r "$wslPath/_site" ~/htmlproofer-check/_site
+		wsl cp "$wslPath/Gemfile" ~/htmlproofer-check/
+		wsl cp "$wslPath/Gemfile.lock" ~/htmlproofer-check/
+
+		Write-Host "Running HTMLProofer via WSL..." -ForegroundColor Green
+		wsl bash -lc "cd ~/htmlproofer-check && bundle install --jobs 4 && bundle exec htmlproofer ./_site --disable-external"
 		if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 	} else {
-		Write-Error "Docker is installed but its engine is unavailable; HTMLProofer was not run. Start Docker Desktop and rerun this script."
+		Write-Error "WSL is installed but not available; HTMLProofer was not run. Make sure WSL is set up and rerun this script."
 		exit 1
 	}
 } else {
-	Write-Error "Docker is not installed. HTMLProofer 5 requires libcurl on Windows; install Docker Desktop or run the check in a Linux environment."
+	Write-Error "WSL is not installed. HTMLProofer 5 requires libcurl on Windows; install WSL (wsl --install) or run the check in a Linux environment."
 	exit 1
 }
 
