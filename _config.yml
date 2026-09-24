@@ -48,4 +48,8 @@ sass:
 url: "https://jamesockenden.github.io"
 baseurl: ""
 
+feed:
+  path: feed.xml         # Custom path for the RSS feed output
+  excerpt_only: false    # Set to true if you only want post excerpts instead of full content
+
 timezone: Europe/London

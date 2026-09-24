@@ -19,21 +19,19 @@ The “human aspect” people feel isn’t evidence of a unified mind. It’s th
 
 Some chat systems can reference historic chats or use tools to fetch fresh information from the web, but that doesn’t mean the model itself is learning from you. Those features are part of the platform around the model, not the model’s internal memory. The underlying model remains stateless, the platform simply provides additional context or external data when needed.
 
-So while it feels like you’re talking to one giant, ever growing intelligence, you’re actually interacting with a temporary, isolated process each time, a sandboxed instance that exists only for the duration of your chat.
+So while it feels like you're talking to one giant, ever growing intelligence, you're actually triggering a series of temporary interactions. The memory of your chat lives in the application around the AI, not inside the model itself.
 
 ### AI Isn’t a Single Brain - It’s a Repeated Pattern
 
-Every chat session is its own temporary process. When you open a chat, the platform spins up a fresh instance of the model, wraps it in safety layers, gives it a context window, and lets it run. When you close the chat, that instance ends. It doesn’t “learn” from you. It doesn’t store your tricks. It doesn’t merge your conversation into some giant hive mind.
+Every chat session is a collection of temporary interactions. When you open a chat and send a message, the system simply passes your past messages alongside your new prompt, gets a reply, and resets.
 
-It’s more like a stateless service that re‑creates the same behaviour pattern each time.
+- Context is passed in fresh with every message
 
-- **Context** only exists inside the session
+- The model forgets everything the moment it finishes replying
 
-- **Safety filters** run on every message
+- Safety filters evaluate each message individually
 
-- **Prompt injection** doesn’t persist
-
-- **The model** doesn’t “grow” from your chats
+- Your data doesn't alter the AI's core baseline
 
 People imagine a single AI absorbing everything. What’s actually happening is a distributed architecture spinning up thousands of isolated reasoning sessions that all behave similarly because they’re running the same underlying model.
 
@@ -136,7 +134,7 @@ The everyday AI chat window isn't a single rogue entity plotting its next move o
 
 Chat AI isn’t a single brain.<br>
 It’s a pattern.<br>
-A temporary instance.<br>
+A temporary interaction.<br>
 A controlled environment.<br>
 
 And understanding that distinction about these tools, what they can actually do, and what they safely cannot, a whole lot clearer.
