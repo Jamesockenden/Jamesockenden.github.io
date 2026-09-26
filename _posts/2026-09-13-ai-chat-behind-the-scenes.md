@@ -41,15 +41,15 @@ You’ve probably seen articles about an AI “escaped the sandbox,” accessed 
 
 Commercial chat systems:
 
-- run inside strict sandboxes
+- Run inside strict sandboxes
 
-- have controlled tool access
+- Have controlled tool access
 
-- cannot execute arbitrary code
+- Cannot execute arbitrary code
 
-- cannot access external systems unless the platform explicitly allows it
+- Cannot access external systems unless the platform explicitly allows it
 
-- cannot modify their own safety layers
+- Cannot modify their own safety layers
 
 Research agents and experimental setups are a different world entirely. They often give models direct tool access, autonomous loops, or unfiltered instructions which is why they behave differently. Those events are not happening inside the everyday chat interface people use.
 
@@ -59,15 +59,15 @@ Once you start pushing at the boundaries, you notice how many layers sit between
 
 From my testing, the layers behave roughly like this:
 
-- **Inbound filters** catch harmful or manipulative instructions
+- Inbound filters catch harmful or manipulative instructions
 
-- **System prompts** define the model’s role and constraints
+- System prompts define the model’s role and constraints
 
-- **Internal alignment** prevents unsafe reasoning paths
+- Internal alignment prevents unsafe reasoning paths
 
-- **Outbound filters** block anything that slips through
+- Outbound filters block anything that slips through
 
-- **Sandboxing** ensures nothing persists beyond the session
+- Sandboxing ensures nothing persists beyond the session
 
 You can try to twist the logic with direct prompts, uploaded files, or website data, but the architecture is explicitly designed to isolate execution and keep the model stable.
 
