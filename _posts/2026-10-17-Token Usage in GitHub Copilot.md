@@ -22,7 +22,7 @@ This article covers documented behavior alongside some deductions where GitHub's
 An LLM does not independently remember a CLI session between requests in the way a person remembers a conversation. The application must provide the relevant conversation and working context for each model request. In Copilot CLI, this includes the conversation, applicable instructions, and available tools.
 
 A useful conceptual model is:
-$$\text{Request Context} \approx \text{System Instructions} + \text{Applicable Custom Instructions} + \text{Available Tool Definitions} + \text{Conversation History} + \text{Current Input}$$
+  Request Context &approx; System Instructions + Applicable Custom Instructions + Available Tool Definitions + Conversation History + Current Input
 
 This is a model for thinking about context, not a literal description of the API payload. The contents vary with the task, configuration, tool loading behaviour, and session history.
 
@@ -119,6 +119,12 @@ Compaction is not the same as shrinking every configuration file on disk. It man
 - **Keep skill descriptions useful and bodies focused:** Ensure descriptions give Copilot enough detail and trigger intent to recognise when a skill applies, while keeping the full `SKILL.md` focused strictly on the workflow.
 - **Avoid duplicating guidance:** Put each rule at the narrowest sensible scope rather than repeating rules across global instructions, agent profiles, and skills.
 - **Measure before and after:** Use `/context` and `/usage` with controlled comparisons. Token counts depend heavily on the model, CLI version, and enabled capabilities.
+
+### Managing the Pipeline: Pre Context Token Reduction
+
+While our architectural model treats Conversation History as a flat accumulator of past turns and tool results, raw terminal interactions introduce massive token bloat. Unfiltered command outputs (git diff, test suite tracebacks, or recursive file lists) can consume thousands of input tokens per interaction.
+
+Integrating a CLI layer like rtk (rtk-ai/rtk) solves this by intercepting shell outputs and applying structural compression, such as reducing test runs to failures only, grouping file changes, and stripping whitespace, it ensures that what eventually lands in the model's Conversation History remains cost effective without modifying how your agent executes tools.
 
 ### The takeaway
 
