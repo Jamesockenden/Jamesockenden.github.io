@@ -93,3 +93,11 @@ If there's one overarching truth about software engineering leadership, it’s t
 Technology changes constantly, organisations evolve, and every project brings a different mix of people, capabilities, and challenges. What worked for one team might not work for the next. There is no static playbook for being a good leader.
 
 This is precisely why I regularly ask my teams for direct, constructive feedback. What am I doing well? What am I doing wrong? How can I help? Real leadership requires the humility to acknowledge that you don't have all the answers, the willingness to adapt your approach, and the commitment to keep growing alongside the people you lead.
+
+---
+
+<img src="https://github.com/Jamesockenden.png" alt="James" width="80" style="border-radius:50%;">
+
+**Written by James Ockenden**<br>
+Engineering Lead<br>
+GitHub: <https://github.com/Jamesockenden>
