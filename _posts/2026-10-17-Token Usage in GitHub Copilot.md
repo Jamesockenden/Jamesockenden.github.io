@@ -22,7 +22,7 @@ This article covers documented behavior alongside some deductions where GitHub's
 An LLM does not independently remember a CLI session between requests in the way a person remembers a conversation. The application must provide the relevant conversation and working context for each model request. In Copilot CLI, this includes the conversation, applicable instructions, and available tools.
 
 A useful conceptual model is:
-  Request Context &approx; System Instructions + Applicable Custom Instructions + Available Tool Definitions + Conversation History + Current Input
+  Request Context: System Instructions + Applicable Custom Instructions + Available Tool Definitions + Conversation History + Current Input
 
 This is a model for thinking about context, not a literal description of the API payload. The contents vary with the task, configuration, tool loading behaviour, and session history.
 
