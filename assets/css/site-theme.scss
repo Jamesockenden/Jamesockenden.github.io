@@ -77,6 +77,16 @@ blockquote { color: #808080; font-style: italic; }
 .section-preview-heading h2 a { color: var(--text-col); }
 .section-preview-heading p { margin: 0 0 .5rem; color: #777; }
 .section-empty { padding: 2rem 0; color: #777; }
+.sponsor-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-name: center;
+  padding: 0.5rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
 footer { padding: 1.5rem 0; color: var(--footer-text-col); background: var(--footer-col); font-size: .9rem; text-align: center; }
 footer p { margin: .5rem 0; }
 
