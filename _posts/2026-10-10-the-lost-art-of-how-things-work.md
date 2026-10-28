@@ -23,21 +23,23 @@ For many people, the inner workings of a machine or system don't seem to matter 
 
 Yet, I notice a growing gap when it comes to basic practical tasks. Things that used to be second nature, changing a car wiper blade, topping up windscreen washer fluid, swapping a light bulb, assembling flat pack furniture, or hanging a shelf are increasingly outsourced.
 
+#### THE CONVENIENCE TRADE OFF
+
 ```text
-┌──────────────────────────────────────────────────────────┐
-│                   THE CONVENIENCE TRADE-OFF               │
-├──────────────────────────────┬───────────────────────────┤
-│    Modern Automation         │     Hands-On Mastery      │
-├──────────────────────────────┼───────────────────────────┤
-│ • Speed & Convenience        │ • Understanding "Why/How" │
-│ • Push button simplicity     │ • Self reliance & Pride   │
-│ • Low friction               │ • Practical resilience    │
-└──────────────────────────────┴───────────────────────────┘
+Modern Automation
+- Speed & Convenience
+- Push button simplicity
+- Low friction
+
+Hands On Mastery
+- Understanding "Why/How"
+- Self reliance & Pride
+- Practical resilience
 ```
 
 I personally love digging into the details. I want to know *why* a component failed, *how* a circuit functions, or *what* keeps a roof structure sound. But when I talk to friends or family, many admit they simply don't care about the details, they just want it to work.
 
-It makes me wonder: **Where will this shift take us as a society over the next few generations?**
+It makes me wonder, **Where will this shift take us as a society over the next few generations?**
 
 ### Demystifying Skills
 
@@ -51,12 +53,15 @@ I often hear warnings like:
 While safety risks around gas, mains electrics, and heavy machinery are real, this culture of fear turns basic DIY tasks into intimidating jobs that people assume only specialists can handle.
 
 ```text
-       MYTH OF THE "TRADE SECRET"                  THE REALITY OF DIY
-┌──────────────────────────────────────┐  ┌──────────────────────────────────────┐
-│ "It's too complex for normal people" │  │ • Requires patience & correct tools  │
-│ "One mistake ruins everything"       │  │ • Follows basic physical logic       │
-│ "Leave everything to experts"        │  │ • Mistakes are learning opportunities │
-└──────────────────────────────────────┘  └──────────────────────────────────────┘
+MYTH OF THE "TRADE SECRET"
+- It's too complex for normal people
+- One mistake ruins everything
+- Leave everything to experts
+
+THE REALITY OF DIY
+- Requires patience & correct tools
+- Follows basic physical logic
+- Mistakes are learning pportunities
 ```
 
 ### So What If It Isn't Perfect?
