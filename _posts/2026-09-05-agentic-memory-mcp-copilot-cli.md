@@ -99,11 +99,3 @@ By delegating indexing to SQLite, fact storage to Markdown OKF files, and execut
 **Standardised Workflows**: Complex, recurring technical tasks run consistently via structured skills.<br>
 
 By pairing Copilot CLI with a structured local memory layer, it stops acting like a basic auto complete tool and becomes a true long term AI pairing partner.
-
----
-
-<img src="https://github.com/Jamesockenden.png" alt="James" width="80" style="border-radius:50%;">
-
-**Written by James Ockenden**<br>
-Engineering Lead<br>
-GitHub: <https://github.com/Jamesockenden>

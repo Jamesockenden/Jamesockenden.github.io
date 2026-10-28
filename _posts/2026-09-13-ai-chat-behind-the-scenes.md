@@ -138,11 +138,3 @@ A temporary interaction.<br>
 A controlled environment.<br>
 
 And understanding that distinction about these tools, what they can actually do, and what they safely cannot, a whole lot clearer.
-
----
-
-<img src="https://github.com/Jamesockenden.png" alt="James" width="80" style="border-radius:50%;">
-
-**Written by James Ockenden**<br>
-Engineering Lead<br>
-GitHub: <https://github.com/Jamesockenden>
