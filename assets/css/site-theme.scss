@@ -115,3 +115,31 @@ footer p { margin: .5rem 0; }
   .nav-menu ul { display: flex; }
   .nav-menu a { padding: .5rem 0 .5rem 1.5rem; }
 }
+
+.post-content table,
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  border: 1px solid #d0d7de;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+/* Prevent narrow first-column wrapping */
+td:first-child,
+th:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+}

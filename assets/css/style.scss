@@ -15,3 +15,58 @@ img, table {
   max-width: 100%;
   height: auto;
 }
+
+.browser-ai-overview {
+  margin: 2.5rem 0;
+  padding: 1.25rem;
+  border: 1px solid #d0d7de;
+  border-radius: 0.5rem;
+  background: #f6f8fa;
+  font-family: var(--header-font);
+}
+
+.browser-ai-overview h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.browser-ai-intro,
+.browser-ai-status {
+  margin: 0.5rem 0;
+  color: #59636e;
+  font-size: 0.9rem;
+}
+
+.browser-ai-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.browser-ai-actions button {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #8c959f;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--text-col);
+  font-family: var(--header-font);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.browser-ai-actions button:hover,
+.browser-ai-actions button:focus-visible {
+  border-color: var(--hover-col);
+  color: var(--hover-col);
+}
+
+.browser-ai-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.browser-ai-result p {
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}

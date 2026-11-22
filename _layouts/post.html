@@ -20,10 +20,337 @@ layout: base
 <main class="container content-section">
   <div class="row">
     <div class="content-column">
-      <div class="blog-post">
-        {{ content }}
+      <article class="blog-post">
+        <div class="post-content">
+          {{ content }}
+        </div>
+
+        <section id="browser-ai-overview" class="browser-ai-overview" hidden aria-labelledby="browser-ai-overview-title">
+          <h2 id="browser-ai-overview-title">AI Overview</h2>
+          <p class="browser-ai-intro">Generated privately in your browser. No article text is sent to a server.</p>
+          <div class="browser-ai-actions" aria-label="Summary options">
+            <button type="button" data-summary-mode="summary">Summarise</button>
+            <button type="button" data-summary-mode="technical">Technical</button>
+            <button type="button" data-summary-mode="takeaways">Key Takeaways</button>
+          </div>
+          <p id="browser-ai-status" class="browser-ai-status" role="status" aria-live="polite"></p>
+          <div id="browser-ai-result" class="browser-ai-result" aria-live="polite"></div>
+        </section>
+
         {% include share-button.html %}
-      </div>
+      </article>
     </div>
   </div>
 </main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    var panel = document.getElementById("browser-ai-overview");
+    var status = document.getElementById("browser-ai-status");
+    var result = document.getElementById("browser-ai-result");
+    var article = document.querySelector("article.blog-post");
+
+    if (!panel || !status || !result || !article) return;
+
+    var nativeSummarizer = typeof window.Summarizer !== "undefined"
+      ? window.Summarizer
+      : null;
+    var legacySummarizer = (window.self && window.self.ai && window.self.ai.summarizer)
+      || (window.ai && window.ai.summarizer)
+      || null;
+    var summarizerAPI = nativeSummarizer || null;
+    var factories = legacySummarizer || null;
+
+    if (!summarizerAPI && !factories) return;
+
+    async function isAvailable() {
+      try {
+        if (summarizerAPI && typeof summarizerAPI.availability === "function") {
+          var availability = await summarizerAPI.availability({
+            type: "key-points",
+            format: "plain-text",
+            length: "medium"
+          });
+          return availability !== "unavailable";
+        }
+        if (summarizerAPI && typeof summarizerAPI.create === "function") return true;
+        if (factories && typeof factories.capabilities === "function") {
+          var capabilities = await factories.capabilities();
+          return capabilities && capabilities.available !== "no";
+        }
+        if (factories && typeof factories.create === "function") return true;
+      } catch (error) {
+        return false;
+      }
+      return false;
+    }
+
+    async function getAvailability() {
+      if (summarizerAPI && typeof summarizerAPI.availability === "function") {
+        return summarizerAPI.availability({
+          type: "key-points",
+          format: "plain-text",
+          length: "medium",
+          expectedInputLanguages: ["en"],
+          outputLanguage: "en"
+        });
+      }
+      return "available";
+    }
+
+    var initialAvailability = await getAvailability();
+    if (initialAvailability === "unavailable" || !(await isAvailable())) return;
+    panel.hidden = false;
+    status.textContent = "Availability: " + initialAvailability;
+
+    var summarizers = {};
+
+    function withTimeout(promise, milliseconds, label) {
+      var timer;
+      var timeout = new Promise(function (_, reject) {
+        timer = setTimeout(function () {
+          reject(new Error(label + " timed out."));
+        }, milliseconds);
+      });
+
+      return Promise.race([promise, timeout]).finally(function () {
+        clearTimeout(timer);
+      });
+    }
+
+    async function getSummarizer(mode) {
+      if (summarizers[mode]) return summarizers[mode];
+
+      var options = {
+        summary: { type: "tldr", format: "plain-text", length: "medium" },
+        technical: { type: "key-points", format: "plain-text", length: "medium" },
+        takeaways: { type: "key-points", format: "plain-text", length: "short" }
+      }[mode];
+      options.expectedInputLanguages = ["en"];
+      options.outputLanguage = "en";
+
+      if (summarizerAPI && typeof summarizerAPI.create === "function") {
+        options.monitor = function (monitor) {
+          monitor.addEventListener("downloadprogress", function (event) {
+            var progress = typeof event.loaded === "number"
+              ? Math.round(event.loaded * 100)
+              : null;
+            status.textContent = progress === null
+              ? "Availability: downloading"
+              : "Availability: downloading — " + progress + "%";
+          });
+        };
+
+        summarizers[mode] = await withTimeout(
+          summarizerAPI.create(options),
+          15 * 60 * 1000,
+          "Model download"
+        );
+      } else if (factories && typeof factories.create === "function") {
+        summarizers[mode] = await withTimeout(
+          factories.create(options),
+          15 * 60 * 1000,
+          "Model download"
+        );
+      } else {
+        throw new Error("The browser Summarizer API is not available.");
+      }
+
+      return summarizers[mode];
+    }
+
+    function getArticleText() {
+      var postContent = article.querySelector(".post-content");
+      if (!postContent) return "";
+      var clone = postContent.cloneNode(true);
+      clone.querySelectorAll("script, style").forEach(function (element) {
+        element.remove();
+      });
+      return (clone.innerText || clone.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function splitIntoChunks(text, maximumLength) {
+      if (text.length <= maximumLength) return [text];
+
+      var chunks = [];
+      var paragraphs = text.split(/(?<=[.!?])\s+|(?:\n+)/);
+      var chunk = "";
+
+      paragraphs.forEach(function (paragraph) {
+        if ((chunk + " " + paragraph).trim().length <= maximumLength) {
+          chunk = (chunk + " " + paragraph).trim();
+          return;
+        }
+
+        if (chunk) chunks.push(chunk);
+
+        if (paragraph.length <= maximumLength) {
+          chunk = paragraph;
+          return;
+        }
+
+        var offset = 0;
+        while (offset < paragraph.length) {
+          chunks.push(paragraph.slice(offset, offset + maximumLength));
+          offset += maximumLength;
+        }
+        chunk = "";
+      });
+
+      if (chunk) chunks.push(chunk);
+      return chunks;
+    }
+
+    async function readStream(stream) {
+      if (stream && typeof stream.getReader === "function") {
+        var reader = stream.getReader();
+        var text = "";
+        var decoder = new TextDecoder();
+
+        while (true) {
+          var item = await reader.read();
+          if (item.done) break;
+          text += typeof item.value === "string"
+            ? item.value
+            : decoder.decode(item.value, { stream: true });
+        }
+        return text;
+      }
+
+      if (stream && typeof stream[Symbol.asyncIterator] === "function") {
+        var streamedText = "";
+        for await (var streamedChunk of stream) {
+          streamedText += streamedChunk;
+        }
+        return streamedText;
+      }
+
+      return typeof stream === "string" ? stream : String(stream || "");
+    }
+
+    async function summarizeChunk(summarizer, text, context) {
+      if (typeof summarizer.summarizeStreaming === "function") {
+        var stream = summarizer.summarizeStreaming(text, { context: context });
+        var streamedText = "";
+
+        if (stream && typeof stream[Symbol.asyncIterator] === "function") {
+          for await (var chunk of stream) {
+            streamedText += chunk;
+            result.textContent = streamedText;
+          }
+          return streamedText;
+        }
+
+        if (stream && typeof stream.getReader === "function") {
+          var reader = stream.getReader();
+          var decoder = new TextDecoder();
+          while (true) {
+            var item = await reader.read();
+            if (item.done) break;
+            streamedText += typeof item.value === "string"
+              ? item.value
+              : decoder.decode(item.value, { stream: true });
+            result.textContent = streamedText;
+          }
+          return streamedText;
+        }
+
+        return readStream(stream);
+      }
+
+      return summarizer.summarize(text, { context: context });
+    }
+
+    function renderPlainText(text) {
+      result.textContent = "";
+      var lines = text.split(/\n+/).filter(function (line) {
+        return line.trim();
+      });
+
+      lines.forEach(function (line) {
+        var paragraph = document.createElement("p");
+        var cleaned = line.replace(/^[-*]\s*/, "").trim();
+        paragraph.textContent = cleaned;
+        result.appendChild(paragraph);
+      });
+
+      if (!result.children.length) {
+        var fallback = document.createElement("p");
+        fallback.textContent = text;
+        result.appendChild(fallback);
+      }
+    }
+
+    panel.querySelectorAll("[data-summary-mode]").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        var mode = button.dataset.summaryMode;
+        var text = getArticleText();
+
+        if (!text) {
+          status.textContent = "There is no article text to summarise.";
+          return;
+        }
+
+        panel.querySelectorAll("[data-summary-mode]").forEach(function (item) {
+          item.disabled = true;
+        });
+        result.textContent = "";
+
+        try {
+          var availability = await getAvailability();
+          status.textContent = "Availability: " + availability;
+          if (availability === "unavailable") {
+            status.textContent = "Availability: unavailable — on-device summarisation is not supported.";
+            return;
+          }
+          if (availability === "downloadable" || availability === "downloading") {
+            status.textContent = "Availability: " + availability + " — starting download...";
+          } else {
+            status.textContent = "Availability: available — generating on this device...";
+          }
+
+          var summarizer = await getSummarizer(mode);
+          var context = mode === "technical"
+            ? "Present the article in clear technical terms, with implementation details and trade-offs where relevant."
+            : mode === "takeaways"
+              ? "Produce concise key takeaways as a short bulleted list."
+              : "Produce a concise, general-audience overview.";
+
+          var chunks = splitIntoChunks(text, 5000);
+          var summaries = [];
+
+          for (var index = 0; index < chunks.length; index++) {
+            status.textContent = "Availability: available — summarising chunk "
+              + (index + 1) + " of " + chunks.length + "...";
+            result.textContent = "";
+            var summary = await withTimeout(
+              summarizeChunk(summarizer, chunks[index], context),
+              3 * 60 * 1000,
+              "Summarisation"
+            );
+            summaries.push(typeof summary === "string" ? summary.trim() : String(summary || "").trim());
+          }
+
+          var summary = summaries.filter(Boolean).join("\n\n");
+          renderPlainText(summary);
+          status.textContent = "Availability: available — overview generated locally.";
+        } catch (error) {
+          var message = error && error.name
+            ? error.name + ": " + (error.message || "The summariser request failed.")
+            : "The summariser request failed.";
+          getAvailability().then(function (availability) {
+            status.textContent = "Availability: " + availability + " — " + message;
+          }).catch(function () {
+            status.textContent = "Availability: unknown — " + message;
+          });
+        } finally {
+          panel.querySelectorAll("[data-summary-mode]").forEach(function (item) {
+            item.disabled = false;
+          });
+        }
+      });
+    });
+  });
+</script>
