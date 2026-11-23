@@ -101,7 +101,7 @@ layout: base
     var initialAvailability = await getAvailability();
     if (initialAvailability === "unavailable" || !(await isAvailable())) return;
     panel.hidden = false;
-    status.textContent = "Availability: " + initialAvailability;
+    status.textContent = "AI Availability: " + initialAvailability;
 
     var summarizers = {};
 
@@ -136,8 +136,8 @@ layout: base
               ? Math.round(event.loaded * 100)
               : null;
             status.textContent = progress === null
-              ? "Availability: downloading"
-              : "Availability: downloading — " + progress + "%";
+              ? "AI Availability: downloading"
+              : "AI Availability: downloading — " + progress + "%";
           });
         };
 
